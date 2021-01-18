@@ -1,5 +1,5 @@
 {
-  "name": "gulp_build",
+  "name": "gulp-build",
   "version": "1.0.0",
   "description": "gulp打包服务",
   "main": "index.js",

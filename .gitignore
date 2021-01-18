@@ -1,6 +1,7 @@
 .idea/
-**/node_modules
-**/dist
+**/node_modules/
+**/dist/
+**/target/
 
 .DS_Store
 
