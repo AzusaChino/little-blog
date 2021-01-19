@@ -27,7 +27,7 @@ func main() {
 	// http://localhost:8080/
 	// http://localhost:8080/mypath
 	println("Start a server listening on http://localhost:8080")
-	srv.ListenAndServe() // same as app.Listen(":8080")
+	_ = srv.ListenAndServe() // same as app.Listen(":8080")
 
 	// Notes:
 	// Banner is not shown at all. Same for the Interrupt Handler, even if app's configuration allows them.
