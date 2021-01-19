@@ -2,7 +2,7 @@ package cn.az.blog.admin.common;
 
 /**
  * Common Constants
- * 
+ *
  * @author az
  */
 public class CommonConst {
