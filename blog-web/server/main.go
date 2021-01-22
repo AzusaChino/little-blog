@@ -1,42 +1,41 @@
 package main
 
 import (
-	"net/http"
+	"context"
 	"github.com/kataras/iris/v12"
+	"little-blog/controller"
+	"net/http"
+	"time"
 )
 
 /**
  * 博客启动主方法
  */
 func main() {
-	app := iris.New()
+	app := iris.Default()
+	app.Use(loggerMiddleware)
 
-	app.Get("/", func(ctx iris.Context) {
-		ctx.Writef("Hello from the server")
+	iris.RegisterOnInterrupt(func() {
+		timeout := 5 * time.Second
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+		// close all hosts
+		_ = app.Shutdown(ctx)
 	})
 
-	app.Get("/mypath", func(ctx iris.Context) {
-		ctx.Writef("Hello from %s", ctx.Path())
-	})
+	var baseApi = "/api/v1"
 
-	// call .Build before use the 'app' as a http.Handler on a custom http.Server
-	app.Build()
+	app.Get(baseApi+"/article", controller.FetchArticleList)
 
-	// create our custom server and assign the Handler/Router
-	srv := &http.Server{Handler: app, Addr: ":8080"} // you have to set Handler:app and Addr, see "iris-way" which does this automatically.
-	// http://localhost:8080/
-	// http://localhost:8080/mypath
+	_ = app.Build()
+
+	srv := &http.Server{Handler: app, Addr: ":8080"}
 	println("Start a server listening on http://localhost:8080")
-	_ = srv.ListenAndServe() // same as app.Listen(":8080")
+	_ = srv.ListenAndServe()
 
-	// Notes:
-	// Banner is not shown at all. Same for the Interrupt Handler, even if app's configuration allows them.
-	//
-	// `.Run` is the only one function that cares about those three.
+}
 
-	// More:
-	// see "multi" if you need to use more than one server at the same app.
-	//
-	// for a custom listener use: iris.Listener(net.Listener) or
-	// iris.TLS(cert,key) or iris.AutoTLS(), see "custom-listener" example for those.
+func loggerMiddleware(ctx iris.Context) {
+	ctx.Application().Logger().Infof("Run before %s", ctx.Path())
+	ctx.Next()
 }

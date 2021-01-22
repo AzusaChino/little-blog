@@ -135,5 +135,4 @@ CREATE TABLE `tb_user_role_relation`
     `role_id` varchar(32) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 17
   DEFAULT CHARSET = utf8 COMMENT ='后台用户和角色关系表';
