@@ -4,6 +4,27 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const routeConfig = [
+  { path: '/',
+    component: App,
+    indexRoute: { component: Dashboard },
+    childRoutes: [
+      { path: 'about', component: About },
+      { path: 'article',
+        component: Inbox,
+        childRoutes: [
+          { path: '/messages/:id', component: Message },
+          { path: 'messages/:id',
+            onEnter: function (nextState, replaceState) {
+              replaceState(null, '/messages/' + nextState.params.id)
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

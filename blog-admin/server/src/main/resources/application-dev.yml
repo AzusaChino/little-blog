@@ -1,6 +1,0 @@
-mybatis-plus:
-  type-aliases-package: cn.az.blog.admin.entity
-  global-config:
-    banner: off
-    db-config:
-      id-type: assign_uuid

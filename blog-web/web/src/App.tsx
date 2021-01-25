@@ -1,7 +1,8 @@
-import React from 'react';
-import './App.css';
-import {Layout, Menu} from 'antd'
-import Article from './components/article'
+import React from "react";
+import "./App.css";
+import { Layout, Menu } from "antd";
+import {Router} from 'react-router'
+import Article from "./components/article";
 
 const { Header, Content, Footer } = Layout;
 function App() {
@@ -16,11 +17,9 @@ function App() {
           </Menu>
         </Header>
         <Content>
-          <Article/>
+          <Article />
         </Content>
-        <Footer>
-          built by az
-        </Footer>
+        <Footer>built by az</Footer>
       </Layout>
     </div>
   );
