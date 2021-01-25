@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/kataras/iris/v12"
-	"little-blog/controller"
+	. "little-blog/handler"
 	"net/http"
 	"time"
 )
@@ -13,8 +13,11 @@ import (
  */
 func main() {
 	app := iris.Default()
-	app.Use(loggerMiddleware)
 
+	// 日志
+	app.Use(loggerHandler)
+	// 允许跨域
+	app.Use(corsHandler)
 	iris.RegisterOnInterrupt(func() {
 		timeout := 5 * time.Second
 		ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -23,10 +26,7 @@ func main() {
 		_ = app.Shutdown(ctx)
 	})
 
-	var baseApi = "/api/v1"
-
-	app.Get(baseApi+"/article", controller.FetchArticleList)
-
+	process(app, &ArticleHandler{}, &ArticleDetailHandler{})
 	_ = app.Build()
 
 	srv := &http.Server{Handler: app, Addr: ":8080"}
@@ -35,7 +35,27 @@ func main() {
 
 }
 
-func loggerMiddleware(ctx iris.Context) {
+func loggerHandler(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Run before %s", ctx.Path())
 	ctx.Next()
+}
+
+func corsHandler(ctx iris.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
+	if ctx.Request().Method == "OPTIONS" {
+		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
+		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
+		ctx.StatusCode(204)
+		return
+	}
+	ctx.Next()
+}
+
+func process(app *iris.Application, handlers ...Handler) {
+	if len(handlers) <= 1 {
+		return
+	}
+	for _, handler := range handlers {
+		app.Handle(handler.Method(), handler.Path(), handler.HandlerFunc)
+	}
 }

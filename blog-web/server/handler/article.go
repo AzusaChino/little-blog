@@ -1,63 +1,85 @@
-package controller
+package handler
 
 import (
-	"fmt"
 	"github.com/kataras/iris/v12"
 	. "little-blog/entity"
+	"net/http"
 	"time"
-	"gorm.io/gorm"
-	"gorm.io/driver/mysql"
 )
 
+// 文章实体类
 type Article struct {
 	BaseEntity
 	Topic        string
 	Thumbnail    string
-	Content      string
 	PublishState int
 	PublishTime  time.Time
 }
 
-func FetchArticleList(ctx iris.Context) {
-	var list = []Article{
-		{
-			BaseEntity: BaseEntity{
-				Id:         "1234",
-				CreateUser: "az",
-				CreateTime: time.Now(),
-			},
-			Topic:        "haha",
-			Thumbnail:    "http://azusahin.cn/a.jpg",
-			Content:      "Go 语言 的 数组 的初始化，即数组定义的时候给数组赋初值，一共可分为四种方法",
-			PublishState: 0,
-			PublishTime:  time.Now(),
-		},
-		{
-			BaseEntity: BaseEntity{
-				Id:         "1234",
-				CreateUser: "az",
-				CreateTime: time.Now(),
-			},
-			Topic:        "haha",
-			Thumbnail:    "http://azusahin.cn/a.jpg",
-			Content:      "Go 语言 的 数组 的初始化，即数组定义的时候给数组赋初值，一共可分为四种方法",
-			PublishState: 0,
-			PublishTime:  time.Now(),
-		},
-	}
-	_, _ = ctx.JSON(list)
+// 文章详情实体类
+type ArticleDetail struct {
+	Article
+	Content string
+}
+
+// gorm指定表名
+func (a *Article) TableName() string {
+	return "tb_article"
+}
+
+// gorm指定表名
+func (ad *ArticleDetail) TableName() string {
+	return "tb_article"
+}
+
+// 列表控制器
+type ArticleHandler struct {
+}
+
+// 详情控制器
+type ArticleDetailHandler struct {
+}
+
+func (_ *ArticleHandler) Method() string {
+	return http.MethodGet
+}
+
+func (_ *ArticleHandler) HandlerFunc(ctx iris.Context) {
+	_, _ = ctx.JSON(fetchArticleList())
+}
+
+func (_ *ArticleHandler) Path() string {
+	return "api/v1/article"
+}
+
+func (_ *ArticleDetailHandler) Method() string {
+	return http.MethodGet
+}
+
+func (_ *ArticleDetailHandler) HandlerFunc(ctx iris.Context) {
+	id := ctx.Params().Get("id")
+	_, _ = ctx.JSON(fetchArticleDetail(id))
+}
+
+func (_ *ArticleDetailHandler) Path() string {
+	return "api/v1/article/{id}"
 }
 
 func fetchArticleList() []Article {
-	mysqlDialector := mysql.Dialector{}
-	mysqlConfig := gorm.Config{}
-	db, err := gorm.Open(mysqlDialector, &mysqlConfig)
-	if err != nil {
-		panic(err)
-	}
-	var article Article
+	db := GetDb()
+	var articles []Article
 
-	fmt.Println(db.Having(&article))
+	// 查找已发布且未删除的文章
+	db.Where("publish_state = ? AND is_delete = ?", 1, 0).Find(&articles)
 
-	return nil
+	return articles
+}
+
+func fetchArticleDetail(id string) ArticleDetail {
+	db := GetDb()
+	var articleDetail ArticleDetail
+
+	db.Where("id = ?", id).Find(&articleDetail)
+
+	return articleDetail
 }
