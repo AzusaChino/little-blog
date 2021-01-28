@@ -22,22 +22,22 @@ type ArticleDetail struct {
 	Content string
 }
 
-// gorm指定表名
-func (a *Article) TableName() string {
-	return "tb_article"
-}
-
-// gorm指定表名
-func (ad *ArticleDetail) TableName() string {
-	return "tb_article"
-}
-
 // 列表控制器
 type ArticleHandler struct {
 }
 
 // 详情控制器
 type ArticleDetailHandler struct {
+}
+
+// gorm指定表名
+func (_ *Article) TableName() string {
+	return "tb_article"
+}
+
+// gorm指定表名
+func (_ *ArticleDetail) TableName() string {
+	return "tb_article"
 }
 
 func (_ *ArticleHandler) Method() string {
