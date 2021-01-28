@@ -13,7 +13,7 @@ interface RoutesType {
 
 const routes: RoutesType[] = [
     {
-        path: '/home',
+        path: '/',
         name: 'Home',
         component: () => import(/* webpackChunkName: "home" */ '../views/home/Home.vue'),
         children: [
