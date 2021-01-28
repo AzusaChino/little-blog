@@ -7,6 +7,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -31,6 +32,7 @@ import java.util.Arrays;
  * @author az
  * @since 01/27/21 21:50
  */
+@Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")

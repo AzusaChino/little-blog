@@ -29,6 +29,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
     <#else>
         public class ${table.controllerName} {
     </#if>
-
     }
 </#if>
