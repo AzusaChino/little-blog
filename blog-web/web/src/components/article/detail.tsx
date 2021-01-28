@@ -1,27 +1,41 @@
 import React from "react";
-import { Typography } from "antd";
-import { ArticleDetail as ArticleDetailInterface } from "../../model/article";
+import {Typography} from "antd";
+import {ArticleDetail as ArticleDetailInterface} from "../../model/article";
+import {fetchArticleDetail} from "../../api/article";
+import {withRouter, RouteComponentProps} from 'react-router-dom'
 
-interface IProps {
-  ad: ArticleDetailInterface;
+interface RouterProps {
+  id: string
 }
 
-const { Title, Paragraph } = Typography;
+interface ArticleDetailProps extends RouteComponentProps<RouterProps> {
+  ad: ArticleDetailInterface
+}
 
-class ArticleDetail extends React.Component<
-  IProps,
+const {Title, Paragraph} = Typography;
+
+class ArticleDetail extends React.Component<ArticleDetailProps,
   { ad: ArticleDetailInterface },
-  {}
-> {
-  constructor(props: IProps) {
+  {}> {
+  constructor(props: ArticleDetailProps) {
     super(props);
     this.state = {
-      ad: this.props.ad || {},
+      ad: this.props.ad || {}
     };
   }
 
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    fetchArticleDetail(id)
+      .then(res => {
+        this.setState({
+          ad: res.data
+        })
+      })
+  }
+
   render() {
-    const { Topic, Content } = this.state.ad;
+    const {Topic, Content} = this.state.ad;
     return (
       <div>
         <Typography>
@@ -33,4 +47,4 @@ class ArticleDetail extends React.Component<
   }
 }
 
-export default ArticleDetail;
+export default withRouter(ArticleDetail);

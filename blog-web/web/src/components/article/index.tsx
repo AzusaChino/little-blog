@@ -1,7 +1,8 @@
 import React from "react";
-import { List, Avatar } from "antd";
-import { fetchList } from "../../api/article";
-import { ArticleList as ArticleListDefinition } from "../../model/article";
+import {List} from "antd";
+import {fetchList} from "../../api/article";
+import {Link} from 'react-router-dom'
+import {ArticleList as ArticleListDefinition} from "../../model/article";
 
 interface IProps {
   size?: 10;
@@ -23,7 +24,7 @@ class ArticleList extends React.Component<IProps, IState, {}> {
   componentDidMount() {
     fetchList({})
       .then((res) => {
-        this.setState({ data: res.data });
+        this.setState({data: res.data});
       })
       .catch((e) => alert("发生了错误" + e));
   }
@@ -35,14 +36,11 @@ class ArticleList extends React.Component<IProps, IState, {}> {
           itemLayout="horizontal"
           dataSource={this.state.data}
           renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                title={<a href="https://ant.design">{item.Topic}</a>}
-                description={item.Thumbnail}
-              />
-            </List.Item>
+            <div>
+              <Link to={`/article/${item.Id}`}>{item.Topic}</Link>
+            </div>
           )}
-        ></List>
+        />
       </div>
     );
   }

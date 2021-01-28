@@ -1,9 +1,9 @@
 import React from 'react'
 
 export function Comment() {
-    return (
-        <div>
-            Comment Here
-        </div>
-    )
+  return (
+    <div>
+      The Comment Page
+    </div>
+  )
 }

@@ -12,5 +12,5 @@ export interface ArticleList {
 }
 
 export interface ArticleDetail extends ArticleList {
-    Content: string
+  Content: string
 }
