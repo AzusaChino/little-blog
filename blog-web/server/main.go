@@ -26,7 +26,7 @@ func main() {
 		_ = app.Shutdown(ctx)
 	})
 
-	process(app, &ArticleHandler{}, &ArticleDetailHandler{}, &CommentHandler{})
+	process(app, &ArticleHandler{}, &ArticleDetailHandler{}, &CommentListHandler{})
 	_ = app.Build()
 
 	srv := &http.Server{Handler: app, Addr: ":8080"}
