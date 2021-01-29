@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: /api/v1
+  port: 8888
 
 spring:
   datasource:
@@ -46,3 +47,9 @@ mybatis-plus:
     banner: off
     db-config:
       id-type: assign_uuid
+
+jwt:
+  secret: azusachino
+  expiration: 36000
+  access-header: Authorization
+  token-header: LittleBlog

@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "JWT加解密使用的密钥."
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "JWT的超期限时间."
+    },
+    {
+      "name": "jwt.access-header",
+      "type": "java.lang.String",
+      "description": "JWT存储的请求头."
+    },
+    {
+      "name": "jwt.token-header",
+      "type": "java.lang.String",
+      "description": "JWT负载中拿到开头."
+    }
+  ]
+}

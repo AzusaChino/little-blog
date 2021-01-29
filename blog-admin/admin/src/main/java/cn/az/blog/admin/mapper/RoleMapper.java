@@ -1,6 +1,6 @@
 package cn.az.blog.admin.mapper;
 
-import cn.az.blog.admin.entity.Article;
+import cn.az.blog.admin.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @version 2021-01-29
  */
 @Repository
-public interface ArticleMapper extends BaseMapper<Article> {
+public interface RoleMapper extends BaseMapper<Role> {
 
 }

@@ -47,11 +47,11 @@ public class RedisUtils {
      */
     public Map<String, Object> getKeySize() throws RedisConnectionFailureException {
         Long dbSize = this.execute(
-                j -> {
-                    Client client = j.getClient();
-                    client.dbSize();
-                    return client.getIntegerReply();
-                }
+            j -> {
+                Client client = j.getClient();
+                client.dbSize();
+                return client.getIntegerReply();
+            }
         );
         Map<String, Object> map = new HashMap<>(16);
         map.put("create_time", System.currentTimeMillis());
@@ -67,15 +67,15 @@ public class RedisUtils {
      */
     public Map<String, Object> getMemoryInfo() throws RedisConnectionFailureException {
         String info = this.execute(
-                j -> {
-                    Client client = j.getClient();
-                    client.info();
-                    return client.getBulkReply();
-                }
+            j -> {
+                Client client = j.getClient();
+                client.info();
+                return client.getBulkReply();
+            }
         );
-        String[] strs = Objects.requireNonNull(info).split(SEPARATOR);
+        String[] strList = Objects.requireNonNull(info).split(SEPARATOR);
         Map<String, Object> map = null;
-        for (String s : strs) {
+        for (String s : strList) {
             String[] detail = s.split(":");
             if ("used_memory".equals(detail[0])) {
                 map = new HashMap<>(16);
