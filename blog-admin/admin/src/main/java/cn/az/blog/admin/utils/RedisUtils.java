@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.params.SetParams;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -127,13 +128,22 @@ public class RedisUtils {
      * @param key         key
      * @param value       value
      * @param miliSeconds 毫秒
-     * @return String string
      * @throws RedisConnectionFailureException the redis connection failure exception
      */
-    public String set(String key, String value, Long miliSeconds) throws RedisConnectionFailureException {
-        String result = set(key, value);
-        pexpire(key, miliSeconds);
-        return result;
+    public void set(String key, String value, Long miliSeconds) throws RedisConnectionFailureException {
+        execute(j -> j.setex(key, miliSeconds.intValue() / 1000, value));
+    }
+
+    /**
+     * set 命令
+     *
+     * @param key       key
+     * @param value     value
+     * @param setParams param
+     * @throws RedisConnectionFailureException the redis connection failure exception
+     */
+    public void set(String key, String value, SetParams setParams) throws RedisConnectionFailureException {
+        execute(j -> j.set(key, value, setParams));
     }
 
     /**

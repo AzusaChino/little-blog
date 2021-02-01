@@ -3,6 +3,8 @@ package cn.az.blog.admin.controller;
 import cn.az.blog.admin.common.CommonResult;
 import cn.az.blog.admin.entity.Article;
 import cn.az.blog.admin.service.IArticleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import java.util.List;
  * @author az
  * @version 2021-01-29
  */
+@Api(value = "博客文章管理", tags = "ArticleController")
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
@@ -26,6 +29,7 @@ public class ArticleController {
     @Resource
     private IArticleService articleService;
 
+    @ApiOperation("获取文章列表")
     @GetMapping
     public CommonResult<List<Article>> list() {
         return CommonResult.success(articleService.list());
