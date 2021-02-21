@@ -35,11 +35,17 @@ func main() {
 
 }
 
+/**
+  日志控件
+*/
 func loggerHandler(ctx iris.Context) {
 	ctx.Application().Logger().Infof("Run before %s", ctx.Path())
 	ctx.Next()
 }
 
+/**
+  跨域控件
+*/
 func corsHandler(ctx iris.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
 	if ctx.Request().Method == "OPTIONS" {
@@ -51,6 +57,9 @@ func corsHandler(ctx iris.Context) {
 	ctx.Next()
 }
 
+/**
+  handler统一控制
+*/
 func process(app *iris.Application, handlers ...Handler) {
 	if len(handlers) <= 1 {
 		return

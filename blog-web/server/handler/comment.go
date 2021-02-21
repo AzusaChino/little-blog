@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/kataras/iris/v12"
-	. "little-blog/entity"
+	. "little-blog/common"
 	"net/http"
 )
 
