@@ -53,7 +53,8 @@ func (_ *CommentHandler) Path() string {
 
 // 仅查询当前文章的第一层评论 TODO
 func fetchArticleCommentList(articleId string) []Comment {
-	db := GetDb()
+	db, cleanFunc, _ := GetDb()
+	defer cleanFunc()
 
 	var comments []Comment
 
@@ -64,7 +65,9 @@ func fetchArticleCommentList(articleId string) []Comment {
 
 // 查询当前评论的评论
 func fetchComment(commentId string) []Comment {
-	db := GetDb()
+	db, cleanFunc, _ := GetDb()
+	defer cleanFunc()
+
 	var comments []Comment
 
 	db.Where("pid = ?", commentId).Find(&comments)

@@ -1,6 +1,10 @@
 package handler
 
 import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/go-redis/redis/v8"
 	"github.com/kataras/iris/v12"
 	. "little-blog/common"
 	"net/http"
@@ -66,7 +70,9 @@ func (_ *ArticleDetailHandler) Path() string {
 }
 
 func fetchArticleList() []Article {
-	db := GetDb()
+	db, cleanFunc, _ := GetDb()
+	defer cleanFunc()
+
 	var articles []Article
 
 	// 查找已发布且未删除的文章
@@ -76,8 +82,36 @@ func fetchArticleList() []Article {
 }
 
 func fetchArticleDetail(id string) ArticleDetail {
-	db := GetDb()
+	db, cleanFunc, _ := GetDb()
+	defer cleanFunc()
 	var articleDetail ArticleDetail
+
+	db.Where("id = ?", id).Find(&articleDetail)
+
+	return articleDetail
+}
+
+func _fetchArticleDetail(id string) ArticleDetail {
+	ctx := context.Background()
+	client := GetRedisClient()
+	val, err := client.Get(ctx, "").Result()
+	switch {
+	case err == redis.Nil:
+		panic("not found")
+	case err != nil:
+		panic(err)
+	case val == "":
+		fmt.Println("value is empty")
+	}
+
+	var articleDetail ArticleDetail
+
+	err = json.Unmarshal([]byte(val), &articleDetail)
+	if err == nil {
+		return articleDetail
+	}
+	db, cleanFunc, _ := GetDb()
+	defer cleanFunc()
 
 	db.Where("id = ?", id).Find(&articleDetail)
 
