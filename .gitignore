@@ -2,7 +2,7 @@
 **/node_modules/
 **/dist/
 **/target/
-
+**/build/
 .DS_Store
 
 # local env files

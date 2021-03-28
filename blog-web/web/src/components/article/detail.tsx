@@ -2,7 +2,7 @@ import React from "react";
 import {Typography} from "antd";
 import {ArticleDetail as ArticleDetailInterface} from "../../model/article";
 import {fetchArticleDetail} from "../../api/article";
-import {withRouter, RouteComponentProps} from 'react-router-dom'
+import {RouteComponentProps} from 'react-router-dom'
 
 interface RouterProps {
   id: string
@@ -25,6 +25,10 @@ class ArticleDetail extends React.Component<ArticleDetailProps,
   }
 
   componentDidMount() {
+    this.updateState()
+  }
+
+  updateState() {
     const id = this.props.match.params.id;
     fetchArticleDetail(id)
       .then(res => {
@@ -47,4 +51,4 @@ class ArticleDetail extends React.Component<ArticleDetailProps,
   }
 }
 
-export default withRouter(ArticleDetail);
+export default ArticleDetail;

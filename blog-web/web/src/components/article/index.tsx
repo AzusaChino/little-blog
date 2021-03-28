@@ -37,7 +37,7 @@ class ArticleList extends React.Component<IProps, IState, {}> {
           dataSource={this.state.data}
           renderItem={(item) => (
             <div>
-              <Link to={`/article/${item.Id}`}>{item.Topic}</Link>
+              <h2><Link to={`/article/${item.Id}`}>{item.Topic}</Link></h2>
             </div>
           )}
         />

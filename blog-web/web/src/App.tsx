@@ -34,7 +34,8 @@ function App() {
               <Route exact path="/" component={Article}/>
               <Route path="/about" component={About}/>
               <Route path="/comment" component={Comment}/>
-              <Route path="/article/:id}" component={ArticleDetail} />
+              <Route path="/article/:id" component={ArticleDetail}/>
+              <Route render={() => <h1>Page Not Found</h1>}/>
             </Switch>
           </Content>
           <Footer>built by az</Footer>
