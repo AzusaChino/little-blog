@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/kataras/iris/v12"
 	. "little-blog/handler"
+	"log"
 	"net/http"
 	"time"
 )
@@ -12,12 +13,12 @@ import (
  * 博客启动主方法
  */
 func main() {
+	// default contains logger
 	app := iris.Default()
 
-	// 日志
-	app.Use(loggerHandler)
 	// 允许跨域
 	app.Use(corsHandler)
+	// graceful shutdown
 	iris.RegisterOnInterrupt(func() {
 		timeout := 5 * time.Second
 		ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -30,17 +31,9 @@ func main() {
 	_ = app.Build()
 
 	srv := &http.Server{Handler: app, Addr: ":8080"}
-	println("Start a server listening on http://localhost:8080")
+	log.Default().Println("Start a server listening on http://localhost:8080")
 	_ = srv.ListenAndServe()
 
-}
-
-/**
-  日志控件
-*/
-func loggerHandler(ctx iris.Context) {
-	ctx.Application().Logger().Infof("Run before %s", ctx.Path())
-	ctx.Next()
 }
 
 /**
@@ -48,10 +41,10 @@ func loggerHandler(ctx iris.Context) {
 */
 func corsHandler(ctx iris.Context) {
 	ctx.Header("Access-Control-Allow-Origin", "*")
-	if ctx.Request().Method == "OPTIONS" {
+	if ctx.Request().Method == iris.MethodOptions {
 		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
 		ctx.Header("Access-Control-Allow-Headers", "Content-Type, Accept, Authorization")
-		ctx.StatusCode(204)
+		ctx.StatusCode(iris.StatusNoContent)
 		return
 	}
 	ctx.Next()

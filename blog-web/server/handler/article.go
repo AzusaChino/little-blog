@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
@@ -92,9 +91,9 @@ func fetchArticleDetail(id string) ArticleDetail {
 }
 
 func _fetchArticleDetail(id string) ArticleDetail {
-	ctx := context.Background()
 	client := GetRedisClient()
-	val, err := client.Get(ctx, "").Result()
+	client.Set(Ctx, "article_detail_"+id, "", 0)
+	val, err := client.Get(Ctx, "").Result()
 	switch {
 	case err == redis.Nil:
 		panic("not found")

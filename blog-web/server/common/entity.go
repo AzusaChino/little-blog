@@ -44,7 +44,9 @@ func GetDb() (*gorm.DB, func(), error) {
 
 	cleanFunc := func() {
 		sqlDb, err := db.DB()
-		_ = sqlDb.Close()
+		if sqlDb != nil {
+			_ = sqlDb.Close()
+		}
 		if err != nil {
 			panic(err)
 		}
