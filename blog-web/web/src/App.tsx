@@ -1,13 +1,18 @@
-import React from "react";
+import React, {CSSProperties} from "react";
 import "./App.css";
 import {Layout, Menu} from "antd";
 import {BrowserRouter as Router, Link, Switch, Route} from 'react-router-dom'
 import Article from "./components/article";
 import ArticleDetail from "./components/article/detail";
-import {About} from './views/about'
-import {Comment} from './views/comment'
+import About from './views/about'
+import Comment from './views/comment'
 
 const {Header, Content, Footer} = Layout;
+
+const contentStyle: CSSProperties = {
+  margin: '24px 16px 0',
+  overflow: 'initial'
+}
 
 function App() {
   return (
@@ -28,7 +33,7 @@ function App() {
               </Menu.Item>
             </Menu>
           </Header>
-          <Content>
+          <Content style={contentStyle}>
             <Switch>
               {/* 使用exact进行精确匹配 */}
               <Route exact path="/" component={Article}/>

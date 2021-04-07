@@ -1,9 +1,11 @@
 import React from 'react'
 
-export function Comment() {
-  return (
-    <div>
-      The Comment Page
-    </div>
-  )
+class Comment extends React.PureComponent {
+  render() {
+    return (
+      <div>The Comment Page</div>
+    );
+  }
 }
+
+export default Comment

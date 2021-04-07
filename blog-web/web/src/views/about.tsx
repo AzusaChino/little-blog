@@ -1,9 +1,10 @@
 import React from 'react'
 
-export function About() {
-  return (
-    <div>
-      The About Page
-    </div>
-  )
+class About extends React.PureComponent {
+
+  render() {
+    return (<div>The About Page</div>);
+  }
 }
+
+export default About

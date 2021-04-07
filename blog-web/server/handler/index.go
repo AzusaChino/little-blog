@@ -6,7 +6,7 @@ import "github.com/kataras/iris/v12"
  * URL控制器
  */
 type Handler interface {
-	Method() string
-	Path() string
-	HandlerFunc(ctx iris.Context)
+    Method() string
+    Path() string
+    HandlerFunc(ctx iris.Context)
 }

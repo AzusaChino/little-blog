@@ -36,7 +36,7 @@ public class UserController {
     @Resource
     private RedisUtils redisUtils;
 
-    @Value("${jwt.tokenHeader}")
+    @Value("${jwt.token-header}")
     private String tokenHeader;
 
     @ApiOperation("登录")

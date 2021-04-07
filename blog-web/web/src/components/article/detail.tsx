@@ -4,19 +4,24 @@ import {ArticleDetail as ArticleDetailInterface} from "../../model/article";
 import {fetchArticleDetail} from "../../api/article";
 import {RouteComponentProps} from 'react-router-dom'
 
+// router transfer parameter
 interface RouterProps {
   id: string
 }
 
+// by using RouteComponentProps receive Props from parent
 interface ArticleDetailProps extends RouteComponentProps<RouterProps> {
+  ad: ArticleDetailInterface
+}
+
+// current context state
+interface ArticleDetailState {
   ad: ArticleDetailInterface
 }
 
 const {Title, Paragraph} = Typography;
 
-class ArticleDetail extends React.Component<ArticleDetailProps,
-  { ad: ArticleDetailInterface },
-  {}> {
+class ArticleDetail extends React.Component<ArticleDetailProps, ArticleDetailState> {
   constructor(props: ArticleDetailProps) {
     super(props);
     this.state = {
