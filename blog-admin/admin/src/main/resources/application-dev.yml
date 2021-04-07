@@ -29,7 +29,7 @@ spring:
   redis:
     host: 180.76.169.35
     port: 6379
-    password:
+    password: azusa520
     jedis:
       pool:
         min-idle: 8

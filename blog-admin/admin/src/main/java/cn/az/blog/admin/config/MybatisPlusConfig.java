@@ -15,6 +15,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan(basePackages = "cn.az.blog.admin.mapper")
 public class MybatisPlusConfig {
 
+    /**
+     * 分页插件
+     *
+     * @return interceptor
+     */
     @Bean
     public PaginationInnerInterceptor paginationInterceptor() {
         PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();

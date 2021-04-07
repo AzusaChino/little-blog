@@ -7,7 +7,6 @@ import cn.az.blog.admin.dto.UserDetails;
 import cn.az.blog.admin.entity.Permission;
 import cn.az.blog.admin.entity.User;
 import cn.az.blog.admin.service.IUserService;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -103,17 +102,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * 自定义实现userDetailService
+     *
+     * @return 用户服务
+     */
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> {
-            User user = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+            User user = userService.getUserByUsername(username);
             if (Objects.nonNull(user)) {
                 List<Permission> permissionList = userService.getPermissionList(user.getId());
                 return new UserDetails(user, permissionList);
             }
-            throw new UsernameNotFoundException("用户名错误");
+            throw new UsernameNotFoundException("未找到当前用户" + username + "的信息");
         };
     }
 

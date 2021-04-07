@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 拒绝访问返回信息
+ *
  * @author ycpang
  * @since 2021-01-29 16:27
  */

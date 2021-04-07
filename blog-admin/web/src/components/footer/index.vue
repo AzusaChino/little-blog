@@ -1,22 +1,27 @@
 <template>
-  <div id="app">
-    <Home/>
+  <div>
+    {{message}}
   </div>
 </template>
 
 <script lang="ts">
-import {Options, Vue} from "vue-class-component";
-import Home from './views/home/Home'
+import {Options, Vue} from 'vue-class-component';
 
+// register imported Components
 @Options({
-  components: {
-    Home,
-  }
+  components: {},
 })
-class App extends Vue {
+
+class Home extends Vue {
+  data() {
+    return {
+      message: "Hello World",
+      router: "The router"
+    }
+  }
 }
 
-export default App
+export default Home
 </script>
 
 <style>

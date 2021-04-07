@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -94,7 +95,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         return template;
     }
 
-
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.RedisCacheManagerBuilder
@@ -110,6 +110,12 @@ public class RedisConfig extends CachingConfigurerSupport {
         return template;
     }
 
+    /**
+     * Used for creating a key based on the given method (used as context) and its parameters.
+     *
+     * @return keyName
+     * @see Cacheable#cacheNames()
+     */
     @Bean
     public KeyGenerator wiselyKeyGenerator() {
         return (target, method, params) -> {
