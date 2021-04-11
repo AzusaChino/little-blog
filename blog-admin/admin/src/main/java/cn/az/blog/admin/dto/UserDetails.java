@@ -4,6 +4,7 @@ import cn.az.blog.admin.entity.Permission;
 import cn.az.blog.admin.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  * @since 2021-01-29 16:22
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 

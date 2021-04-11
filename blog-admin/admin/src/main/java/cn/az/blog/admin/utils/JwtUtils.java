@@ -25,6 +25,7 @@ public class JwtUtils {
 
     @Value("${jwt.secret}")
     private String secret;
+
     @Value("${jwt.expiration}")
     private Long expiration;
 
@@ -66,12 +67,11 @@ public class JwtUtils {
      * 从token中获取登录用户名
      */
     public String getUserNameFromToken(String token) {
-        String username;
+        String username = null;
         try {
             Claims claims = getClaimsFromToken(token);
             username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
+        } catch (Exception ignored) {
         }
         return username;
     }

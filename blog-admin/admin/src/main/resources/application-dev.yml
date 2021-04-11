@@ -45,8 +45,6 @@ mybatis-plus:
     default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
   global-config:
     banner: off
-    db-config:
-      id-type: assign_uuid
 
 jwt:
   secret: azusachino

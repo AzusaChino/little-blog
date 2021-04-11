@@ -1,5 +1,7 @@
 package cn.az.blog.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,6 +24,8 @@ import java.time.LocalDateTime;
 @TableName("tb_user")
 @ApiModel(value = "User对象", description = "用户信息表")
 public class User implements Serializable {
+
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     @ApiModelProperty(value = "用户名称")
     private String username;
@@ -53,6 +57,5 @@ public class User implements Serializable {
     private LocalDateTime updateTime;
     @ApiModelProperty(value = "是否已删除(0-未删除,1-已删除)")
     private Integer isDelete;
-
 
 }

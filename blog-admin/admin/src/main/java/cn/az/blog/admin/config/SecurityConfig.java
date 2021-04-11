@@ -3,9 +3,6 @@ package cn.az.blog.admin.config;
 import cn.az.blog.admin.component.JwtAuthenticationTokenFilter;
 import cn.az.blog.admin.component.RestfulAccessDeniedHandler;
 import cn.az.blog.admin.component.RestfulAuthenticationEntryPoint;
-import cn.az.blog.admin.dto.UserDetails;
-import cn.az.blog.admin.entity.Permission;
-import cn.az.blog.admin.entity.User;
 import cn.az.blog.admin.service.IUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,14 +15,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author ycpang
@@ -71,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             )
             .permitAll()
             // 对登录注册要允许匿名访问
-            .antMatchers("/login")
+            .antMatchers("api/v1/user/login", "api/v1/user/register")
             .permitAll()
             // 跨域请求会先进行一次options请求
             .antMatchers(HttpMethod.OPTIONS)
@@ -111,14 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return username -> {
-            User user = userService.getUserByUsername(username);
-            if (Objects.nonNull(user)) {
-                List<Permission> permissionList = userService.getPermissionList(user.getId());
-                return new UserDetails(user, permissionList);
-            }
-            throw new UsernameNotFoundException("未找到当前用户" + username + "的信息");
-        };
+        return this.userService::loadUserByUsername;
     }
 
     @Bean

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Resource
     private JwtUtils jwtUtils;
+
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = getUserByUsername(username);
+        if (Objects.nonNull(user)) {
+            List<Permission> permissionList = getPermissionList(user.getId());
+            return new UserDetails(user, permissionList);
+        }
+        throw new UsernameNotFoundException("未找到当前用户" + username);
+    }
 
     @Override
     public User getUserByUsername(String username) {
@@ -39,7 +51,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public User register(User user) {
+    public String register(User user) {
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
         return null;
     }
 
@@ -65,12 +79,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return null;
     }
 
-    private UserDetails loadUserByUsername(String username) {
-        User user = getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
-        if (Objects.nonNull(user)) {
-            List<Permission> permissionList = getPermissionList(user.getId());
-            return new UserDetails(user, permissionList);
-        }
-        throw new RuntimeException("");
-    }
 }

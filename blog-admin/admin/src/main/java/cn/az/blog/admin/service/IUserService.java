@@ -3,6 +3,8 @@ package cn.az.blog.admin.service;
 import cn.az.blog.admin.entity.Permission;
 import cn.az.blog.admin.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -11,6 +13,15 @@ import java.util.List;
  * @version 2021-01-29
  */
 public interface IUserService extends IService<User> {
+
+    /**
+     * 根据用户名称获取信息
+     *
+     * @param username 用户名
+     * @return 用户信息
+     * @throws UsernameNotFoundException 用户不存在异常
+     */
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     /**
      * 根据用户名获取后台管理员
@@ -26,7 +37,7 @@ public interface IUserService extends IService<User> {
      * @param user user
      * @return user
      */
-    User register(User user);
+    String register(User user);
 
     /**
      * 登录功能

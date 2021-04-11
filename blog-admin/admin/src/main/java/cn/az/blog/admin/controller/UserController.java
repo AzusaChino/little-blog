@@ -2,6 +2,7 @@ package cn.az.blog.admin.controller;
 
 import cn.az.blog.admin.common.CommonResult;
 import cn.az.blog.admin.dto.LoginParam;
+import cn.az.blog.admin.entity.User;
 import cn.az.blog.admin.service.IUserService;
 import cn.az.blog.admin.utils.RedisUtils;
 import cn.hutool.core.util.StrUtil;
@@ -60,5 +61,11 @@ public class UserController {
     @GetMapping("/permission/{userId}")
     public CommonResult<?> getPermissionList(@PathVariable String userId) {
         return CommonResult.success(userService.getPermissionList(userId));
+    }
+
+    @ApiOperation("注册用户")
+    @PostMapping("/register")
+    public CommonResult<?> register(@RequestBody User user) {
+        return CommonResult.success(userService.register(user));
     }
 }

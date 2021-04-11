@@ -19,4 +19,14 @@
     <result column="is_delete" property="isDelete"/>
   </resultMap>
 
+  <select id="queryByUserId" resultMap="BaseResultMap">
+    select tp.*
+    from tb_permission tp
+           left join tb_role_permission_relation trpr on tp.id = trpr.permission_id
+           left join tb_user_role_relation turr on trpr.role_id = turr.role_id
+           left join tb_user tu on turr.user_id = tu.id
+    where tu.id = #{userId}
+
+  </select>
+
 </mapper>
