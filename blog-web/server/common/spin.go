@@ -1,23 +1,23 @@
 package common
 
 import (
-    "runtime"
-    "sync"
-    "sync/atomic"
+	"runtime"
+	"sync"
+	"sync/atomic"
 )
 
 type spinLock uint32
 
 func (sl *spinLock) Lock() {
-    for !atomic.CompareAndSwapUint32((*uint32)(sl), 0, 1) {
-    }
-    runtime.Gosched()
+	for !atomic.CompareAndSwapUint32((*uint32)(sl), 0, 1) {
+	}
+	runtime.Gosched()
 }
 
 func (sl *spinLock) Unlock() {
-    atomic.StoreUint32((*uint32)(sl), 0)
+	atomic.StoreUint32((*uint32)(sl), 0)
 }
 
 func NewSpinLock() sync.Locker {
-    return new(spinLock)
+	return new(spinLock)
 }

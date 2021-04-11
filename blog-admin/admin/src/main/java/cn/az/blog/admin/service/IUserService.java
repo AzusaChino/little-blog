@@ -1,9 +1,9 @@
 package cn.az.blog.admin.service;
 
+import cn.az.blog.admin.dto.UserDetails;
 import cn.az.blog.admin.entity.Permission;
 import cn.az.blog.admin.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
