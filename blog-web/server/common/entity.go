@@ -4,20 +4,9 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"net/http"
-	"time"
 )
 
-// 实例父类
-type BaseEntity struct {
-	Id         string `gorm:"primary_key"`
-	CreateUser string
-	CreateTime time.Time
-	UpdateUser string
-	UpdateTime time.Time
-	IsDelete   int
-}
-
-// 前端返回封装类
+// RestResponse 前端返回封装类
 type RestResponse struct {
 	Code    uint8
 	Data    interface{}
@@ -36,10 +25,10 @@ func Error(code uint8, msg string) *RestResponse {
 	return &RestResponse{Code: code, Message: msg}
 }
 
-// 数据库连接地址: user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
+// DsnUrl 数据库连接地址: user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
 const DsnUrl = "az:azusa520@tcp(180.76.169.35:3306)/little_blog?charset=utf8mb4&parseTime=True&loc=Local"
 
-// 获取数据库连接
+// GetDb 获取数据库连接
 func GetDb() (*gorm.DB, func(), error) {
 
 	db, err := gorm.Open(mysql.New(mysql.Config{

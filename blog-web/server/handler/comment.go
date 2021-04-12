@@ -3,26 +3,14 @@ package handler
 import (
 	"github.com/kataras/iris/v12"
 	. "little-blog/common"
+	. "little-blog/model"
 	"net/http"
 )
-
-type Comment struct {
-	BaseEntity
-	ArticleId string
-	Pid       string
-	Nickname  string
-	Email     string
-	Content   string
-}
 
 type CommentListHandler struct {
 }
 
 type CommentHandler struct {
-}
-
-func (_ *Comment) TableName() string {
-	return "tb_comment"
 }
 
 func (_ *CommentListHandler) Method() string {
@@ -35,7 +23,7 @@ func (_ *CommentListHandler) HandlerFunc(ctx iris.Context) {
 }
 
 func (_ *CommentListHandler) Path() string {
-	return "api/v1/article/{id}/comment"
+	return "/{id}/comment"
 }
 
 func (_ *CommentHandler) Method() string {
@@ -48,7 +36,7 @@ func (_ *CommentHandler) HandlerFunc(ctx iris.Context) {
 }
 
 func (_ *CommentHandler) Path() string {
-	return "api/v1/comment/{id}"
+	return "/comment/{id}"
 }
 
 // 仅查询当前文章的第一层评论 TODO

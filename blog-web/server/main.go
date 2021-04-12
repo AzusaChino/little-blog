@@ -3,8 +3,7 @@ package main
 import (
 	"context"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/mvc"
-	. "little-blog/handler"
+	"little-blog/router"
 	"log"
 	"net/http"
 	"time"
@@ -27,11 +26,8 @@ func main() {
 		// close all hosts
 		_ = app.Shutdown(ctx)
 	})
-	articleApi := app.Party("/api/v1/article")
-	m := mvc.New(articleApi)
-	m.Handle(new(BookController))
 
-	process(app, &ArticleHandler{}, &ArticleDetailHandler{}, &CommentListHandler{})
+	router.ApplyRouter(app)
 	_ = app.Build()
 
 	srv := &http.Server{Handler: app, Addr: ":8080"}
@@ -54,27 +50,4 @@ func corsHandler(ctx iris.Context) {
 		return
 	}
 	ctx.Next()
-}
-
-/**
-  handler统一控制
-*/
-func process(app *iris.Application, handlers ...Handler) {
-	if len(handlers) <= 1 {
-		return
-	}
-	for _, handler := range handlers {
-		app.Handle(handler.Method(), handler.Path(), handler.HandlerFunc)
-	}
-}
-
-type BookController struct {
-}
-
-func (c *BookController) Get() []struct{} {
-	return nil
-}
-
-func (c *BookController) Post(s struct{}) int {
-	return 0
 }

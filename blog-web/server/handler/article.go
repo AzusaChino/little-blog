@@ -3,24 +3,10 @@ package handler
 import (
 	"github.com/kataras/iris/v12"
 	. "little-blog/common"
+	. "little-blog/model"
 	"net/http"
 	"time"
 )
-
-// Article 文章实体类
-type Article struct {
-	BaseEntity
-	Topic        string
-	Thumbnail    string
-	PublishState int
-	PublishTime  time.Time
-}
-
-// ArticleDetail 文章详情实体类
-type ArticleDetail struct {
-	Article
-	Content string
-}
 
 // ArticleHandler 列表控制器
 type ArticleHandler struct {
@@ -28,16 +14,6 @@ type ArticleHandler struct {
 
 // ArticleDetailHandler 详情控制器
 type ArticleDetailHandler struct {
-}
-
-// TableName gorm指定表名
-func (_ *Article) TableName() string {
-	return "tb_article"
-}
-
-// TableName gorm指定表名
-func (_ *ArticleDetail) TableName() string {
-	return "tb_article"
 }
 
 func (_ *ArticleHandler) Method() string {
@@ -54,7 +30,7 @@ func (_ *ArticleHandler) HandlerFunc(ctx iris.Context) {
 }
 
 func (_ *ArticleHandler) Path() string {
-	return "api/v1/article"
+	return ""
 }
 
 func (_ *ArticleDetailHandler) Method() string {
@@ -67,19 +43,32 @@ func (_ *ArticleDetailHandler) HandlerFunc(ctx iris.Context) {
 }
 
 func (_ *ArticleDetailHandler) Path() string {
-	return "api/v1/article/{id}"
+	return "/{id}"
 }
 
 func fetchArticleList(pageNum, pageSize int) *RestResponse {
 	db, cleanFunc, _ := GetDb()
 	defer cleanFunc()
 
+	// 5秒超时
+	timer := time.NewTimer(5 * time.Second)
+	ch := make(chan []Article)
+
 	var articles []Article
+	go func() {
 
-	// 查找已发布且未删除的文章
-	db.Limit(pageSize).Offset((pageNum-1)*pageSize).Where("publish_state = ? AND is_delete = ?", 1, 0).Find(&articles)
+		// 查找已发布且未删除的文章
+		db.Limit(pageSize).Offset((pageNum-1)*pageSize).Where("publish_state = ? AND is_delete = ?", 1, 0).Find(&articles)
+		ch <- articles
+	}()
 
-	return Ok(articles)
+	select {
+	case articles = <-ch:
+		return Ok(articles)
+	case <-timer.C:
+		return Error(http.StatusRequestTimeout, "查询超时")
+	}
+
 }
 
 func fetchArticleDetail(id string) *RestResponse {
